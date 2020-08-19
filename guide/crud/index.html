@@ -17,7 +17,7 @@
         <meta name="author" content="Square, Inc.">
       
       <link rel="shortcut icon" href="../../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.4.0">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.3.3">
     
     
       
@@ -603,6 +603,7 @@
                   <h1>CRUD</h1>
                 
                 <p>We’ve written some examples that demonstrate how to solve common problems with Tempest. Read through them to learn about how everything works together.</p>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Kotlin</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="k">interface</span> <span class="nc">MusicTable</span> <span class="p">:</span> <span class="n">LogicalTable</span><span class="p">&lt;</span><span class="n">MusicItem</span><span class="p">&gt;</span> <span class="p">{</span>
   <span class="k">val</span> <span class="py">albumInfo</span><span class="p">:</span> <span class="n">InlineView</span><span class="p">&lt;</span><span class="n">AlbumInfo</span><span class="p">.</span><span class="n">Key</span><span class="p">,</span> <span class="n">AlbumInfo</span><span class="p">&gt;</span>
   <span class="k">val</span> <span class="py">albumTracks</span><span class="p">:</span> <span class="n">InlineView</span><span class="p">&lt;</span><span class="n">AlbumTrack</span><span class="p">.</span><span class="n">Key</span><span class="p">,</span> <span class="n">AlbumTrack</span><span class="p">&gt;</span>
@@ -611,6 +612,7 @@
 <span class="k">data</span> <span class="k">class</span> <span class="nc">AlbumInfo</span><span class="p">(</span>
   <span class="n">@Attribute</span><span class="p">(</span><span class="n">name</span> <span class="p">=</span> <span class="s">&quot;partition_key&quot;</span><span class="p">)</span>
   <span class="k">val</span> <span class="py">album_token</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span>
+  <span class="k">val</span> <span class="py">album_title</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span>
   <span class="k">val</span> <span class="py">album_name</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span>
   <span class="k">val</span> <span class="py">release_date</span><span class="p">:</span> <span class="n">LocalDate</span><span class="p">,</span>
   <span class="k">val</span> <span class="py">genre_name</span><span class="p">:</span> <span class="n">String</span>
@@ -640,8 +642,83 @@
 <span class="p">}</span>
 </code></pre></div>
 
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Java</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">interface</span> <span class="nc">MusicTable</span> <span class="p">:</span> <span class="n">LogicalTable</span><span class="o">&lt;</span><span class="n">MusicItem</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="n">val</span> <span class="n">albumInfo</span><span class="p">:</span> <span class="n">InlineView</span><span class="o">&lt;</span><span class="n">AlbumInfo</span><span class="p">.</span><span class="na">Key</span><span class="p">,</span> <span class="n">AlbumInfo</span><span class="o">&gt;</span>
+  <span class="n">val</span> <span class="n">albumTracks</span><span class="p">:</span> <span class="n">InlineView</span><span class="o">&lt;</span><span class="n">AlbumTrack</span><span class="p">.</span><span class="na">Key</span><span class="p">,</span> <span class="n">AlbumTrack</span><span class="o">&gt;</span>
+<span class="p">}</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AlbumInfo</span> <span class="p">{</span>
+  <span class="nd">@Attribute</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;partition_key&quot;</span><span class="p">)</span>
+  <span class="kd">public</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">album_token</span><span class="p">;</span>
+  <span class="kd">public</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">album_title</span><span class="p">;</span>
+  <span class="kd">public</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">artist_name</span><span class="p">;</span>
+  <span class="kd">public</span> <span class="kd">final</span> <span class="n">LocalDate</span> <span class="n">release_date</span><span class="p">;</span>
+  <span class="kd">public</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">genre_name</span><span class="p">;</span>
+
+  <span class="nd">@Attribute</span><span class="p">(</span><span class="n">prefix</span> <span class="o">=</span> <span class="s">&quot;INFO_&quot;</span><span class="p">)</span>
+  <span class="kd">public</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">sort_key</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+
+  <span class="kd">public</span> <span class="nf">AlbumInfo</span><span class="p">(</span>
+      <span class="n">String</span> <span class="n">album_token</span><span class="p">,</span>
+      <span class="n">String</span> <span class="n">album_title</span><span class="p">,</span>
+      <span class="n">String</span> <span class="n">artist_name</span><span class="p">,</span>
+      <span class="n">LocalDate</span> <span class="n">release_date</span><span class="p">,</span>
+      <span class="n">String</span> <span class="n">genre_name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">album_token</span> <span class="o">=</span> <span class="n">album_token</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">album_title</span> <span class="o">=</span> <span class="n">album_title</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">artist_name</span> <span class="o">=</span> <span class="n">artist_name</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">release_date</span> <span class="o">=</span> <span class="n">release_date</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">genre_name</span> <span class="o">=</span> <span class="n">genre_name</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Key</span> <span class="p">{</span>
+    <span class="kd">public</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">album_token</span><span class="p">;</span>
+    <span class="kd">public</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">sort_key</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+
+    <span class="kd">public</span> <span class="nf">Key</span><span class="p">(</span><span class="n">String</span> <span class="n">album_token</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="na">album_token</span> <span class="o">=</span> <span class="n">album_token</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AlbumTrack</span> <span class="p">{</span>
+  <span class="nd">@Attribute</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;partition_key&quot;</span><span class="p">)</span>
+  <span class="kd">public</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">album_token</span><span class="p">;</span>
+  <span class="nd">@Attribute</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;sort_key&quot;</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">=</span> <span class="s">&quot;TRACK_&quot;</span><span class="p">)</span>
+  <span class="kd">public</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">track_token</span><span class="p">;</span>
+  <span class="kd">public</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">track_title</span><span class="p">;</span>
+  <span class="kd">public</span> <span class="kd">final</span> <span class="n">Duration</span> <span class="n">run_length</span><span class="p">;</span>
+
+  <span class="kd">public</span> <span class="nf">AlbumTrack</span><span class="p">(</span>
+      <span class="n">String</span> <span class="n">album_token</span><span class="p">,</span> 
+      <span class="n">String</span> <span class="n">track_token</span><span class="p">,</span> 
+      <span class="n">String</span> <span class="n">track_title</span><span class="p">,</span>
+      <span class="n">Duration</span> <span class="n">run_length</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">album_token</span> <span class="o">=</span> <span class="n">album_token</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">track_token</span> <span class="o">=</span> <span class="n">track_token</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">track_title</span> <span class="o">=</span> <span class="n">track_title</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">run_length</span> <span class="o">=</span> <span class="n">run_length</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Key</span> <span class="p">{</span>
+    <span class="kd">public</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">album_token</span><span class="p">;</span>
+    <span class="kd">public</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">track_token</span><span class="p">;</span>
+
+    <span class="kd">public</span> <span class="nf">Key</span><span class="p">(</span><span class="n">String</span> <span class="n">album_token</span><span class="p">,</span> <span class="n">String</span> <span class="n">track_token</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="na">album_token</span> <span class="o">=</span> <span class="n">album_token</span><span class="p">;</span>
+      <span class="k">this</span><span class="p">.</span><span class="na">track_token</span> <span class="o">=</span> <span class="n">track_token</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</div>
+</div>
 <h2 id="read">Read<a class="headerlink" href="#read" title="Permanent link">&para;</a></h2>
 <p>Use <code>load()</code> to read a value.</p>
+<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Kotliin</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="k">private</span> <span class="k">val</span> <span class="py">table</span><span class="p">:</span> <span class="n">MusicTable</span>
 
 <span class="k">fun</span> <span class="nf">getAlbumTitle</span><span class="p">(</span><span class="n">albumToken</span><span class="p">:</span> <span class="n">String</span><span class="p">):</span> <span class="n">String</span><span class="p">?</span> <span class="p">{</span>
@@ -650,6 +727,22 @@
 <span class="p">}</span>
 </code></pre></div>
 
+</div>
+<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">Java</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">private</span> <span class="kd">final</span> <span class="n">MusicTable</span> <span class="n">table</span><span class="p">;</span>
+
+<span class="nd">@Nullable</span>
+<span class="kd">public</span> <span class="n">String</span> <span class="nf">getAlbumTitle</span><span class="p">(</span><span class="n">String</span> <span class="n">albumToken</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">AlbumInfo</span> <span class="n">albumInfo</span> <span class="o">=</span> <span class="n">table</span><span class="p">.</span><span class="na">albumInfo</span><span class="p">().</span><span class="na">load</span><span class="p">(</span><span class="k">new</span> <span class="n">AlbumInfo</span><span class="p">.</span><span class="na">Key</span><span class="p">(</span><span class="n">albumToken</span><span class="p">));</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">albumInfo</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="n">albumInfo</span><span class="p">.</span><span class="na">album_title</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</div>
+</div>
 <div class="admonition tip">
 <p class="admonition-title">DynamoDB is eventually consistent by default</p>
 <p>For actions that only read data, this is usually fine! Once the read completes it could be updated
@@ -657,15 +750,50 @@ anyway, so whether the read reflects very recent writes is typically insignifica
 <p>If your read immediately follows a write of the same item, you should use a strongly consistent read
 to ensure your read reflects the write.</p>
 </div>
-<div class="highlight"><pre><span></span><code><span class="c1">// Write an item.</span>
-<span class="k">val</span> <span class="py">item</span><span class="p">:</span> <span class="n">AlbumInfo</span>
-<span class="n">musicTable</span><span class="p">.</span><span class="n">albumInfo</span><span class="p">.</span><span class="n">save</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-<span class="c1">// Read that item.</span>
-<span class="k">val</span> <span class="py">itemRead</span> <span class="p">=</span> <span class="n">musicTable</span><span class="p">.</span><span class="n">albumInfo</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">item</span><span class="p">.</span><span class="n">key</span><span class="p">)</span>
-<span class="c1">// Note that the value we just read might be older than the value we wrote.</span>
+<div class="tabbed-set" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><label for="__tabbed_3_1">Kotlin</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="k">fun</span> <span class="nf">readAfterWrite</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// Write an item.</span>
+  <span class="k">val</span> <span class="py">item</span> <span class="p">=</span> <span class="n">AlbumInfo</span><span class="p">(</span>
+    <span class="n">album_token</span> <span class="p">=</span> <span class="s">&quot;ALBUM_cafcf892&quot;</span><span class="p">,</span>
+    <span class="n">album_title</span> <span class="p">=</span> <span class="s">&quot;The Dark Side of the Moon&quot;</span><span class="p">,</span>
+    <span class="n">artist_name</span> <span class="p">=</span> <span class="s">&quot;Pink Floyd&quot;</span><span class="p">,</span>
+    <span class="n">release_date</span> <span class="p">=</span> <span class="n">LocalDate</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="m">1973</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">1</span><span class="p">),</span>
+    <span class="n">genre_name</span> <span class="p">=</span> <span class="s">&quot;Progressive rock&quot;</span>
+  <span class="p">)</span>
+  <span class="n">table</span><span class="p">.</span><span class="n">albumInfo</span><span class="p">.</span><span class="n">save</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+  <span class="c1">// Read that item.</span>
+  <span class="k">val</span> <span class="py">itemRead</span> <span class="p">=</span> <span class="n">table</span><span class="p">.</span><span class="n">albumInfo</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">item</span><span class="p">.</span><span class="n">key</span><span class="p">)</span>
+  <span class="c1">// Note that the value we just read might be older than the value we wrote.</span>
+<span class="p">}</span>
 </code></pre></div>
 
+</div>
+<input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><label for="__tabbed_3_2">Java</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">public</span> <span class="kt">void</span> <span class="nf">readAfterWrite</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// Write an item.</span>
+  <span class="n">AlbumInfo</span> <span class="n">item</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AlbumInfo</span><span class="p">(</span>
+      <span class="c1">// album_token.</span>
+      <span class="s">&quot;ALBUM_cafcf892&quot;</span><span class="p">,</span>
+      <span class="c1">// album_title.</span>
+      <span class="s">&quot;The Dark Side of the Moon&quot;</span><span class="p">,</span>
+      <span class="c1">// artist_name.</span>
+      <span class="s">&quot;Pink Floyd&quot;</span><span class="p">,</span>
+      <span class="c1">// release_date.</span>
+      <span class="n">LocalDate</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="mi">1973</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+      <span class="c1">// genre_name.</span>
+      <span class="s">&quot;Progressive rock&quot;</span>
+  <span class="p">);</span>
+  <span class="n">table</span><span class="p">.</span><span class="na">albumInfo</span><span class="p">().</span><span class="na">save</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+  <span class="c1">// Read that item.</span>
+  <span class="n">AlbumInfo</span> <span class="n">itemRead</span> <span class="o">=</span> <span class="n">table</span><span class="p">.</span><span class="na">albumInfo</span><span class="p">().</span><span class="na">load</span><span class="p">(</span><span class="n">item</span><span class="p">.</span><span class="na">key</span><span class="p">);</span>
+  <span class="c1">// Note that the value we just read might be older than the value we wrote.</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</div>
+</div>
 <p>If you need to read your writes, you may perform a strongly consistent read at a higher latency.</p>
+<div class="tabbed-set" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><label for="__tabbed_4_1">Kotlin</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="k">private</span> <span class="k">val</span> <span class="py">table</span><span class="p">:</span> <span class="n">MusicTable</span>
 
 <span class="k">fun</span> <span class="nf">getAlbumTitle</span><span class="p">(</span><span class="n">albumToken</span><span class="p">:</span> <span class="n">String</span><span class="p">):</span> <span class="n">String</span><span class="p">?</span> <span class="p">{</span>
@@ -677,49 +805,127 @@ to ensure your read reflects the write.</p>
 <span class="p">}</span>
 </code></pre></div>
 
-<h2 id="update">Update<a class="headerlink" href="#update" title="Permanent link">&para;</a></h2>
-<p>By default, writes are unconditional. When there is a conflict, the last writer wins. </p>
-<div class="highlight"><pre><span></span><code><span class="k">private</span> <span class="k">val</span> <span class="py">table</span><span class="p">:</span> <span class="n">MusicTable</span>
+</div>
+<input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><label for="__tabbed_4_2">Java</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">private</span> <span class="kd">final</span> <span class="n">MusicTable</span> <span class="n">table</span><span class="p">;</span>
 
-<span class="k">fun</span> <span class="nf">addAlbum</span><span class="p">(</span><span class="n">albumInfo</span><span class="p">:</span> <span class="n">AlbumInfo</span><span class="p">)</span> <span class="p">{</span>
-  <span class="n">musicTable</span><span class="p">.</span><span class="n">albumInfo</span><span class="p">.</span><span class="n">save</span><span class="p">(</span><span class="n">albumInfo</span><span class="p">)</span>
+<span class="nd">@Nullable</span>
+<span class="kd">public</span> <span class="n">String</span> <span class="nf">getAlbumTitle</span><span class="p">(</span><span class="n">String</span> <span class="n">albumToken</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">AlbumInfo</span> <span class="n">albumInfo</span> <span class="o">=</span> <span class="n">table</span><span class="p">.</span><span class="na">albumInfo</span><span class="p">().</span><span class="na">load</span><span class="p">(</span>
+      <span class="k">new</span> <span class="n">AlbumInfo</span><span class="p">.</span><span class="na">Key</span><span class="p">(</span><span class="n">albumToken</span><span class="p">),</span>
+      <span class="c1">// consistentReads.</span>
+      <span class="n">ConsistentReads</span><span class="p">.</span><span class="na">CONSISTENT</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">albumInfo</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="n">albumInfo</span><span class="p">.</span><span class="na">album_title</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
 
-<p>To prevent lost updates across concurrent writes, you may specify a condition expression. If the condition expression evaluates to true, the operation is applied; otherwise, the operation is rolled back.</p>
+</div>
+</div>
+<h2 id="update">Update<a class="headerlink" href="#update" title="Permanent link">&para;</a></h2>
+<p>By default, writes are unconditional. When there is a conflict, the last writer wins. </p>
+<div class="tabbed-set" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><label for="__tabbed_5_1">Kotlin</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="k">private</span> <span class="k">val</span> <span class="py">table</span><span class="p">:</span> <span class="n">MusicTable</span>
 
 <span class="k">fun</span> <span class="nf">addAlbum</span><span class="p">(</span><span class="n">albumInfo</span><span class="p">:</span> <span class="n">AlbumInfo</span><span class="p">)</span> <span class="p">{</span>
-  <span class="n">musicTable</span><span class="p">.</span><span class="n">albumInfo</span><span class="p">.</span><span class="n">save</span><span class="p">(</span><span class="n">albumInfo</span><span class="p">,</span> <span class="n">ifNotExist</span><span class="p">())</span>
+  <span class="n">table</span><span class="p">.</span><span class="n">albumInfo</span><span class="p">.</span><span class="n">save</span><span class="p">(</span><span class="n">albumInfo</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</div>
+<input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><label for="__tabbed_5_2">Java</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">private</span> <span class="kd">final</span> <span class="n">MusicTable</span> <span class="n">table</span><span class="p">;</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">addAlbum</span><span class="p">(</span><span class="n">AlbumInfo</span> <span class="n">albumInfo</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">table</span><span class="p">.</span><span class="na">albumInfo</span><span class="p">().</span><span class="na">save</span><span class="p">(</span><span class="n">albumInfo</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</div>
+</div>
+<p>To prevent lost updates across concurrent writes, you may specify a condition expression. If the condition expression evaluates to true, the operation is applied; otherwise, the operation is rolled back.</p>
+<div class="tabbed-set" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><label for="__tabbed_6_1">Kotlin</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="k">private</span> <span class="k">val</span> <span class="py">table</span><span class="p">:</span> <span class="n">MusicTable</span>
+
+<span class="k">fun</span> <span class="nf">addAlbum</span><span class="p">(</span><span class="n">albumInfo</span><span class="p">:</span> <span class="n">AlbumInfo</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">table</span><span class="p">.</span><span class="n">albumInfo</span><span class="p">.</span><span class="n">save</span><span class="p">(</span><span class="n">albumInfo</span><span class="p">,</span> <span class="n">ifNotExist</span><span class="p">())</span>
 <span class="p">}</span>
 
-<span class="k">fun</span> <span class="nf">ifNotExist</span><span class="p">():</span> <span class="n">DynamoDBSaveExpression</span> <span class="p">{</span>
+<span class="k">private</span> <span class="k">fun</span> <span class="nf">ifNotExist</span><span class="p">():</span> <span class="n">DynamoDBSaveExpression</span> <span class="p">{</span>
   <span class="k">return</span> <span class="n">DynamoDBSaveExpression</span><span class="p">()</span>
     <span class="p">.</span><span class="n">withExpectedEntry</span><span class="p">(</span><span class="s">&quot;partition_key&quot;</span><span class="p">,</span> <span class="n">ExpectedAttributeValue</span><span class="p">().</span><span class="n">withExists</span><span class="p">(</span><span class="k">false</span><span class="p">))</span>
 <span class="p">}</span>
 </code></pre></div>
 
-<h2 id="delete">Delete<a class="headerlink" href="#delete" title="Permanent link">&para;</a></h2>
-<p>Use <code>delete()</code> to delete a value by key.</p>
-<div class="highlight"><pre><span></span><code><span class="k">private</span> <span class="k">val</span> <span class="py">table</span><span class="p">:</span> <span class="n">MusicTable</span>
+</div>
+<input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><label for="__tabbed_6_2">Java</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">private</span> <span class="kd">final</span> <span class="n">MusicTable</span> <span class="n">table</span><span class="p">;</span>
 
-<span class="k">fun</span> <span class="nf">deleteAlbum</span><span class="p">(</span><span class="n">albumToken</span><span class="p">:</span> <span class="n">String</span><span class="p">)</span> <span class="p">{</span>
-  <span class="n">musicTable</span><span class="p">.</span><span class="n">albumInfo</span><span class="p">.</span><span class="n">delete</span><span class="p">(</span><span class="n">AlbumInfo</span><span class="p">.</span><span class="n">Key</span><span class="p">(</span><span class="n">albumToken</span><span class="p">))</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">addAlbum</span><span class="p">(</span><span class="n">AlbumInfo</span> <span class="n">albumInfo</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">table</span><span class="p">.</span><span class="na">albumInfo</span><span class="p">().</span><span class="na">save</span><span class="p">(</span><span class="n">albumInfo</span><span class="p">,</span> <span class="n">ifNotExist</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="kd">private</span> <span class="n">DynamoDBSaveExpression</span> <span class="nf">ifNotExist</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="n">DynamoDBSaveExpression</span><span class="p">()</span>
+      <span class="p">.</span><span class="na">withExpectedEntry</span><span class="p">(</span><span class="s">&quot;partition_key&quot;</span><span class="p">,</span> <span class="k">new</span> <span class="n">ExpectedAttributeValue</span><span class="p">().</span><span class="na">withExists</span><span class="p">(</span><span class="kc">false</span><span class="p">));</span>
 <span class="p">}</span>
 </code></pre></div>
 
-<p>Similarly, you can add a condition expression to the delete operation. </p>
+</div>
+</div>
+<h2 id="delete">Delete<a class="headerlink" href="#delete" title="Permanent link">&para;</a></h2>
+<p>Use <code>delete()</code> to delete a value by key.</p>
+<div class="tabbed-set" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><label for="__tabbed_7_1">Kotlin</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="k">private</span> <span class="k">val</span> <span class="py">table</span><span class="p">:</span> <span class="n">MusicTable</span>
 
 <span class="k">fun</span> <span class="nf">deleteAlbum</span><span class="p">(</span><span class="n">albumToken</span><span class="p">:</span> <span class="n">String</span><span class="p">)</span> <span class="p">{</span>
-  <span class="n">musicTable</span><span class="p">.</span><span class="n">albumInfo</span><span class="p">.</span><span class="n">delete</span><span class="p">(</span><span class="n">AlbumInfo</span><span class="p">.</span><span class="n">Key</span><span class="p">(</span><span class="n">albumToken</span><span class="p">),</span> <span class="n">ifExist</span><span class="p">())</span>
+  <span class="n">table</span><span class="p">.</span><span class="n">albumInfo</span><span class="p">.</span><span class="n">delete</span><span class="p">(</span><span class="n">AlbumInfo</span><span class="p">.</span><span class="n">Key</span><span class="p">(</span><span class="n">albumToken</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</div>
+<input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><label for="__tabbed_7_2">Java</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">private</span> <span class="kd">final</span> <span class="n">MusicTable</span> <span class="n">table</span><span class="p">;</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">deleteAlbum</span><span class="p">(</span><span class="n">String</span> <span class="n">albumToken</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">table</span><span class="p">.</span><span class="na">albumInfo</span><span class="p">().</span><span class="na">deleteKey</span><span class="p">(</span><span class="k">new</span> <span class="n">AlbumInfo</span><span class="p">.</span><span class="na">Key</span><span class="p">(</span><span class="n">albumToken</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</div>
+</div>
+<p>Similarly, you can add a condition expression to the delete operation. </p>
+<div class="tabbed-set" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><label for="__tabbed_8_1">Kotlin</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="k">private</span> <span class="k">val</span> <span class="py">table</span><span class="p">:</span> <span class="n">MusicTable</span>
+
+<span class="k">fun</span> <span class="nf">deleteAlbum</span><span class="p">(</span><span class="n">albumToken</span><span class="p">:</span> <span class="n">String</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">table</span><span class="p">.</span><span class="n">albumInfo</span><span class="p">.</span><span class="n">delete</span><span class="p">(</span><span class="n">AlbumInfo</span><span class="p">.</span><span class="n">Key</span><span class="p">(</span><span class="n">albumToken</span><span class="p">),</span> <span class="n">ifExist</span><span class="p">())</span>
 <span class="p">}</span>
 
-<span class="k">fun</span> <span class="nf">ifExist</span><span class="p">():</span> <span class="n">DynamoDBSaveExpression</span> <span class="p">{</span>
+<span class="k">private</span> <span class="k">fun</span> <span class="nf">ifExist</span><span class="p">():</span> <span class="n">DynamoDBSaveExpression</span> <span class="p">{</span>
   <span class="k">return</span> <span class="n">DynamoDBSaveExpression</span><span class="p">()</span>
     <span class="p">.</span><span class="n">withExpectedEntry</span><span class="p">(</span><span class="s">&quot;partition_key&quot;</span><span class="p">,</span> <span class="n">ExpectedAttributeValue</span><span class="p">().</span><span class="n">withExists</span><span class="p">(</span><span class="k">true</span><span class="p">))</span>
 <span class="p">}</span>
 </code></pre></div>
+
+</div>
+<input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><label for="__tabbed_8_2">Java</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">private</span> <span class="kd">final</span> <span class="n">MusicTable</span> <span class="n">table</span><span class="p">;</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">deleteAlbum</span><span class="p">(</span><span class="n">String</span> <span class="n">albumToken</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">table</span><span class="p">.</span><span class="na">albumInfo</span><span class="p">().</span><span class="na">deleteKey</span><span class="p">(</span><span class="k">new</span> <span class="n">AlbumInfo</span><span class="p">.</span><span class="na">Key</span><span class="p">(</span><span class="n">albumToken</span><span class="p">),</span> <span class="n">ifExist</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="kd">private</span> <span class="n">DynamoDBDeleteExpression</span> <span class="nf">ifExist</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="n">DynamoDBDeleteExpression</span><span class="p">()</span>
+      <span class="p">.</span><span class="na">withExpectedEntry</span><span class="p">(</span><span class="s">&quot;partition_key&quot;</span><span class="p">,</span> <span class="k">new</span> <span class="n">ExpectedAttributeValue</span><span class="p">().</span><span class="na">withExists</span><span class="p">(</span><span class="kc">true</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</div>
+</div>
                 
               
               
@@ -791,14 +997,14 @@ to ensure your read reflects the write.</p>
     </div>
     
       <script src="../../assets/javascripts/vendor.d710d30a.min.js"></script>
-      <script src="../../assets/javascripts/bundle.b39636ac.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      <script src="../../assets/javascripts/bundle.4a5ba8d6.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
       
       <script>
         app = initialize({
           base: "../..",
           features: {"tabs": true},
           search: Object.assign({
-            worker: "../../assets/javascripts/worker/search.a68abb33.min.js"
+            worker: "../../assets/javascripts/worker/search.9b3611bd.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>

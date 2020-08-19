@@ -17,7 +17,7 @@
         <meta name="author" content="Square, Inc.">
       
       <link rel="shortcut icon" href="../../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.4.0">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.3.3">
     
     
       
@@ -609,7 +609,8 @@ DynamoDB uses primary keys to uniquely identify each item in a table and seconda
 <li>Creating custom aliases from a short URL to a destination URL.</li>
 <li>Redirecting existing short URLs to destination URLs.  </li>
 </ul>
-<p>We express it like this in Kotlin.
+<p>We express it like this in code.</p>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Kotlin</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="k">interface</span> <span class="nc">UrlShortener</span> <span class="p">{</span>
   <span class="cm">/** </span>
 <span class="cm">   * Creates a custom alias from [shortUrl] to [destinationUrl]. </span>
@@ -623,7 +624,28 @@ DynamoDB uses primary keys to uniquely identify each item in a table and seconda
 <span class="cm">    */</span>
   <span class="k">fun</span> <span class="nf">redirect</span><span class="p">(</span><span class="n">shortUrl</span><span class="p">:</span> <span class="n">String</span><span class="p">):</span> <span class="n">String</span><span class="p">?</span>
 <span class="p">}</span>
-</code></pre></div></p>
+</code></pre></div>
+
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Java</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UrlShortener</span> <span class="p">{</span>
+  <span class="cm">/**</span>
+<span class="cm">   * Creates a custom alias from {@code shortUrl} to {@code destinationUrl}.</span>
+<span class="cm">   * @return false if {@code shortUrl} is taken.</span>
+<span class="cm">   */</span>
+  <span class="kt">boolean</span> <span class="nf">shorten</span><span class="p">(</span><span class="n">String</span> <span class="n">shortUrl</span><span class="p">,</span> <span class="n">String</span> <span class="n">destinationUrl</span><span class="p">);</span>
+
+  <span class="cm">/**</span>
+<span class="cm">   * Redirects {@code shortUrl} to its destination.</span>
+<span class="cm">   * @return null if not found.</span>
+<span class="cm">   */</span>
+  <span class="nd">@Nullable</span>
+  <span class="n">String</span> <span class="nf">redirect</span><span class="p">(</span><span class="n">String</span> <span class="n">shortUrl</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</div>
+</div>
 <p>We will store URL aliases in the following table.</p>
 <table>
   <tbody>
@@ -664,7 +686,8 @@ DynamoDB uses primary keys to uniquely identify each item in a table and seconda
   </tbody>
 </table>
 
-<p>To access this table in Kotlin, model it using <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBMapper.html"><code>DynamoDBMapper</code></a>.</p>
+<p>To access this table in code, model it using <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBMapper.html"><code>DynamoDBMapper</code></a>.</p>
+<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Kotlin</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="c1">// Note: this POJO is not type-safe because its attributes are nullable and mutable.</span>
 <span class="n">@DynamoDBTable</span><span class="p">(</span><span class="n">tableName</span> <span class="p">=</span> <span class="s">&quot;alias_items&quot;</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">AliasItem</span> <span class="p">{</span>
@@ -675,8 +698,39 @@ DynamoDB uses primary keys to uniquely identify each item in a table and seconda
 <span class="p">}</span>
 </code></pre></div>
 
+</div>
+<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">Java</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="c1">// Note: this POJO is not type-safe because its attributes are nullable and mutable.</span>
+<span class="nd">@DynamoDBTable</span><span class="p">(</span><span class="n">tableName</span> <span class="o">=</span> <span class="s">&quot;alias_items&quot;</span><span class="p">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AliasItem</span> <span class="p">{</span>
+  <span class="kd">private</span> <span class="n">String</span> <span class="n">shortUrl</span><span class="p">;</span>
+  <span class="kd">private</span> <span class="n">String</span> <span class="n">destinationUrl</span><span class="p">;</span>
+
+  <span class="nd">@DynamoDBHashKey</span><span class="p">(</span><span class="n">attributeName</span> <span class="o">=</span> <span class="s">&quot;short_url&quot;</span><span class="p">)</span>
+  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getShortUrl</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">shortUrl</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setShortUrl</span><span class="p">(</span><span class="n">String</span> <span class="n">short_url</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">shortUrl</span> <span class="o">=</span> <span class="n">short_url</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nd">@DynamoDBAttribute</span><span class="p">(</span><span class="n">attributeName</span> <span class="o">=</span> <span class="s">&quot;destination_url&quot;</span><span class="p">)</span>
+  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getDestinationUrl</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">destinationUrl</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setDestinationUrl</span><span class="p">(</span><span class="n">String</span> <span class="n">destination_url</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">destinationUrl</span> <span class="o">=</span> <span class="n">destination_url</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</div>
+</div>
 <p>Tempest lets you interact with <code>AliasItem</code> using strongly typed data classes.</p>
-<div class="highlight"><pre><span></span><code><span class="k">interface</span> <span class="nc">UrlShortenerDb</span><span class="p">:</span> <span class="n">LogicalDb</span> <span class="p">{</span>
+<div class="tabbed-set" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><label for="__tabbed_3_1">Kotlin</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="k">interface</span> <span class="nc">AliasDb</span><span class="p">:</span> <span class="n">LogicalDb</span> <span class="p">{</span>
   <span class="k">val</span> <span class="py">aliasTable</span><span class="p">:</span> <span class="n">AliasTable</span>
 <span class="p">}</span>
 
@@ -694,15 +748,54 @@ DynamoDB uses primary keys to uniquely identify each item in a table and seconda
 <span class="p">}</span>
 </code></pre></div>
 
+</div>
+<input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><label for="__tabbed_3_2">Java</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">AliasDb</span> <span class="kd">extends</span> <span class="n">LogicalDb</span> <span class="p">{</span>
+  <span class="n">AliasTable</span> <span class="nf">aliasTable</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">AliasTable</span> <span class="kd">extends</span> <span class="n">LogicalTable</span><span class="o">&lt;</span><span class="n">AliasItem</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="n">InlineView</span><span class="o">&lt;</span><span class="n">Alias</span><span class="p">.</span><span class="na">Key</span><span class="p">,</span> <span class="n">Alias</span><span class="o">&gt;</span> <span class="nf">aliases</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Alias</span> <span class="p">{</span>
+
+  <span class="kd">public</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">short_url</span><span class="p">;</span>
+  <span class="kd">public</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">destination_url</span><span class="p">;</span>
+
+  <span class="kd">public</span> <span class="nf">Alias</span><span class="p">(</span><span class="n">String</span> <span class="n">short_url</span><span class="p">,</span> <span class="n">String</span> <span class="n">destination_url</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">short_url</span> <span class="o">=</span> <span class="n">short_url</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">destination_url</span> <span class="o">=</span> <span class="n">destination_url</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">public</span> <span class="n">Key</span> <span class="nf">key</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="n">Key</span><span class="p">(</span><span class="n">short_url</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Key</span> <span class="p">{</span>
+
+    <span class="kd">public</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">short_url</span><span class="p">;</span>
+
+    <span class="kd">public</span> <span class="nf">Key</span><span class="p">(</span><span class="n">String</span> <span class="n">short_url</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="na">short_url</span> <span class="o">=</span> <span class="n">short_url</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</div>
+</div>
 <p>Let&rsquo;s put everything together.</p>
+<div class="tabbed-set" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><label for="__tabbed_4_1">Kotlin</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">RealUrlShortener</span><span class="p">(</span>
   <span class="k">private</span> <span class="k">val</span> <span class="py">table</span><span class="p">:</span> <span class="n">AliasTable</span>
-<span class="p">):</span> <span class="n">UrlShortener</span> <span class="p">{</span>
+<span class="p">)</span> <span class="p">:</span> <span class="n">UrlShortener</span> <span class="p">{</span>
 
   <span class="k">override</span> <span class="k">fun</span> <span class="nf">shorten</span><span class="p">(</span><span class="n">shortUrl</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="n">destinationUrl</span><span class="p">:</span> <span class="n">String</span><span class="p">):</span> <span class="n">Boolean</span> <span class="p">{</span>
     <span class="k">val</span> <span class="py">item</span> <span class="p">=</span> <span class="n">Alias</span><span class="p">(</span><span class="n">shortUrl</span><span class="p">,</span> <span class="n">destinationUrl</span><span class="p">)</span>
     <span class="k">val</span> <span class="py">ifNotExist</span> <span class="p">=</span> <span class="n">DynamoDBSaveExpression</span><span class="p">()</span>
-      <span class="p">.</span><span class="n">withExpectedEntry</span><span class="p">(</span><span class="s">&quot;short_url&quot;</span><span class="p">,</span> <span class="n">ExpectedAttributeValue</span><span class="p">().</span><span class="n">withExists</span><span class="p">(</span><span class="k">false</span><span class="p">))</span>
+      <span class="p">.</span><span class="n">withExpectedEntry</span><span class="p">(</span><span class="s">&quot;short_url&quot;</span><span class="p">,</span> <span class="n">ExpectedAttributeValue</span><span class="p">()</span>
+        <span class="p">.</span><span class="n">withExists</span><span class="p">(</span><span class="k">false</span><span class="p">))</span>
     <span class="k">return</span> <span class="k">try</span> <span class="p">{</span>
       <span class="n">table</span><span class="p">.</span><span class="n">aliases</span><span class="p">.</span><span class="n">save</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ifNotExist</span><span class="p">)</span>
       <span class="k">true</span>
@@ -718,14 +811,64 @@ DynamoDB uses primary keys to uniquely identify each item in a table and seconda
   <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="k">fun</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="k">fun</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Array</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;)</span> <span class="p">{</span>
   <span class="k">val</span> <span class="py">client</span><span class="p">:</span> <span class="n">AmazonDynamoDB</span> <span class="p">=</span> <span class="n">AmazonDynamoDBClientBuilder</span><span class="p">.</span><span class="n">standard</span><span class="p">().</span><span class="n">build</span><span class="p">()</span>
   <span class="k">val</span> <span class="py">mapper</span><span class="p">:</span> <span class="n">DynamoDBMapper</span> <span class="p">=</span> <span class="n">DynamoDBMapper</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
-  <span class="k">val</span> <span class="py">db</span><span class="p">:</span> <span class="n">UrlShortenerDb</span> <span class="p">=</span> <span class="n">LogicalDb</span><span class="p">(</span><span class="n">mapper</span><span class="p">)</span>
+  <span class="k">val</span> <span class="py">db</span><span class="p">:</span> <span class="n">AliasDb</span> <span class="p">=</span> <span class="n">LogicalDb</span><span class="p">(</span><span class="n">mapper</span><span class="p">)</span>
   <span class="k">val</span> <span class="py">urlShortener</span> <span class="p">=</span> <span class="n">RealUrlShortener</span><span class="p">(</span><span class="n">db</span><span class="p">.</span><span class="n">aliasTable</span><span class="p">)</span>
   <span class="n">urlShortener</span><span class="p">.</span><span class="n">shorten</span><span class="p">(</span><span class="s">&quot;tempest&quot;</span><span class="p">,</span> <span class="s">&quot;https://cashapp.github.io/tempest&quot;</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
+
+</div>
+<input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><label for="__tabbed_4_2">Java</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">RealUrlShortener</span> <span class="kd">implements</span> <span class="n">UrlShortener</span> <span class="p">{</span>
+
+  <span class="kd">private</span> <span class="kd">final</span> <span class="n">AliasTable</span> <span class="n">table</span><span class="p">;</span>
+
+  <span class="kd">public</span> <span class="nf">RealUrlShortener</span><span class="p">(</span><span class="n">AliasTable</span> <span class="n">table</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">table</span> <span class="o">=</span> <span class="n">table</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">shorten</span><span class="p">(</span><span class="n">String</span> <span class="n">shortUrl</span><span class="p">,</span> <span class="n">String</span> <span class="n">destinationUrl</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">Alias</span> <span class="n">item</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Alias</span><span class="p">(</span><span class="n">shortUrl</span><span class="p">,</span> <span class="n">destinationUrl</span><span class="p">);</span>
+    <span class="n">DynamoDBSaveExpression</span> <span class="n">ifNotExist</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DynamoDBSaveExpression</span><span class="p">()</span>
+        <span class="p">.</span><span class="na">withExpectedEntry</span><span class="p">(</span>
+            <span class="s">&quot;short_url&quot;</span><span class="p">,</span>
+            <span class="k">new</span> <span class="n">ExpectedAttributeValue</span><span class="p">().</span><span class="na">withExists</span><span class="p">(</span><span class="kc">false</span><span class="p">));</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="n">table</span><span class="p">.</span><span class="na">aliases</span><span class="p">().</span><span class="na">save</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ifNotExist</span><span class="p">);</span>
+      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">ConditionalCheckFailedException</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Failed to shorten $shortUrl because it already exists!&quot;</span><span class="p">);</span>
+      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nd">@Override</span>
+  <span class="nd">@Nullable</span>
+  <span class="kd">public</span> <span class="n">String</span> <span class="nf">redirect</span><span class="p">(</span><span class="n">String</span> <span class="n">shortUrl</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">Alias</span><span class="p">.</span><span class="na">Key</span> <span class="n">key</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Alias</span><span class="p">.</span><span class="na">Key</span><span class="p">(</span><span class="n">shortUrl</span><span class="p">);</span>
+    <span class="n">Alias</span> <span class="n">alias</span> <span class="o">=</span> <span class="n">table</span><span class="p">.</span><span class="na">aliases</span><span class="p">().</span><span class="na">load</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">alias</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">alias</span><span class="p">.</span><span class="na">destination_url</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">AmazonDynamoDB</span> <span class="n">client</span> <span class="o">=</span> <span class="n">AmazonDynamoDBClientBuilder</span><span class="p">.</span><span class="na">standard</span><span class="p">().</span><span class="na">build</span><span class="p">();</span>
+  <span class="n">DynamoDBMapper</span> <span class="n">mapper</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DynamoDBMapper</span><span class="p">(</span><span class="n">client</span><span class="p">);</span>
+  <span class="n">AliasDb</span> <span class="n">db</span> <span class="o">=</span> <span class="n">LogicalDb</span><span class="p">.</span><span class="na">create</span><span class="p">(</span><span class="n">AliasDb</span><span class="p">.</span><span class="na">class</span><span class="p">,</span> <span class="n">mapper</span><span class="p">);</span>
+  <span class="n">UrlShortener</span> <span class="n">urlShortener</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RealUrlShortener</span><span class="p">(</span><span class="n">db</span><span class="p">.</span><span class="na">aliasTable</span><span class="p">());</span>
+  <span class="n">urlShortener</span><span class="p">.</span><span class="na">shorten</span><span class="p">(</span><span class="s">&quot;tempest&quot;</span><span class="p">,</span> <span class="s">&quot;https://cashapp.github.io/tempest&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</div>
+</div>
                 
               
               
@@ -797,14 +940,14 @@ DynamoDB uses primary keys to uniquely identify each item in a table and seconda
     </div>
     
       <script src="../../assets/javascripts/vendor.d710d30a.min.js"></script>
-      <script src="../../assets/javascripts/bundle.b39636ac.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      <script src="../../assets/javascripts/bundle.4a5ba8d6.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
       
       <script>
         app = initialize({
           base: "../..",
           features: {"tabs": true},
           search: Object.assign({
-            worker: "../../assets/javascripts/worker/search.a68abb33.min.js"
+            worker: "../../assets/javascripts/worker/search.9b3611bd.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>

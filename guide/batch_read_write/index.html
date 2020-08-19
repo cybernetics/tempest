@@ -17,7 +17,7 @@
         <meta name="author" content="Square, Inc.">
       
       <link rel="shortcut icon" href="../../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.4.0">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.3.3">
     
     
       
@@ -590,18 +590,38 @@
                 
                 <h2 id="batch-load">Batch Load<a class="headerlink" href="#batch-load" title="Permanent link">&para;</a></h2>
 <p><code>LogicalDb</code> lets you <code>batchLoad</code> multiple items from one or more tables using their primary keys.</p>
-<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="py">musicDb</span><span class="p">:</span> <span class="n">MusicDb</span>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Kotlin</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="k">private</span> <span class="k">val</span> <span class="py">db</span><span class="p">:</span> <span class="n">MusicDb</span>
 
-<span class="k">fun</span> <span class="nf">loadPlaylistTracks</span><span class="p">(</span><span class="n">playlist</span><span class="p">:</span> <span class="n">PlaylistInfo</span><span class="p">):</span> <span class="n">Set</span><span class="p">&lt;</span><span class="n">AlbumTrack</span><span class="p">&gt;</span> <span class="p">{</span>
-  <span class="k">val</span> <span class="py">results</span> <span class="p">=</span> <span class="n">musicDb</span><span class="p">.</span><span class="n">batchLoad</span><span class="p">(</span>
-     <span class="n">playlist</span><span class="p">.</span><span class="n">track_tokens</span><span class="p">,</span> <span class="c1">// [ AlbumTrack.Key(&quot;ALBUM_1&quot;, track_number = 1), AlbumTrack.Key(&quot;ALBUM_354&quot;, 12), AlbumTrack.Key(&quot;ALBUM_23&quot;, 9) ]</span>
-     <span class="n">consistentReads</span> <span class="p">=</span> <span class="n">ConsistentReads</span><span class="p">.</span><span class="n">EVENTUAL</span><span class="p">,</span>
-     <span class="n">retryStrategy</span> <span class="p">=</span> <span class="n">DefaultBatchLoadRetryStrategy</span><span class="p">()</span>
+<span class="k">fun</span> <span class="nf">loadPlaylistTracks</span><span class="p">(</span><span class="n">playlist</span><span class="p">:</span> <span class="n">PlaylistInfo</span><span class="p">):</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">AlbumTrack</span><span class="p">&gt;</span> <span class="p">{</span>
+  <span class="k">val</span> <span class="py">results</span> <span class="p">=</span> <span class="n">db</span><span class="p">.</span><span class="n">batchLoad</span><span class="p">(</span>
+    <span class="n">keys</span> <span class="p">=</span> <span class="n">playlist</span><span class="p">.</span><span class="n">playlist_tracks</span><span class="p">,</span> <span class="c1">// [AlbumTrack.Key(&quot;ALBUM_1&quot;, track_number = 1), AlbumTrack.Key(&quot;ALBUM_354&quot;, 12), ...]</span>
+    <span class="n">consistentReads</span> <span class="p">=</span> <span class="n">ConsistentReads</span><span class="p">.</span><span class="n">EVENTUAL</span><span class="p">,</span>
+    <span class="n">retryStrategy</span> <span class="p">=</span> <span class="n">DefaultBatchLoadRetryStrategy</span><span class="p">()</span>
   <span class="p">)</span>
   <span class="k">return</span> <span class="n">results</span><span class="p">.</span><span class="n">getItems</span><span class="p">&lt;</span><span class="n">AlbumTrack</span><span class="p">&gt;()</span>
 <span class="p">}</span>
 </code></pre></div>
 
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Java</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">private</span> <span class="kd">final</span> <span class="n">MusicDb</span> <span class="n">db</span><span class="p">;</span>
+
+<span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">AlbumTrack</span><span class="o">&gt;</span> <span class="nf">loadPlaylistTracks</span><span class="p">(</span><span class="n">PlaylistInfo</span> <span class="n">playlist</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">ItemSet</span> <span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="na">batchLoad</span><span class="p">(</span>
+      <span class="c1">// keys.</span>
+      <span class="n">playlist</span><span class="p">.</span><span class="na">playlist_tracks</span><span class="p">,</span> <span class="c1">// [AlbumTrack.Key(&quot;ALBUM_1&quot;, track_number = 1), AlbumTrack.Key(&quot;ALBUM_354&quot;, 12), ...]</span>
+      <span class="c1">// consistentReads.</span>
+      <span class="n">ConsistentReads</span><span class="p">.</span><span class="na">EVENTUAL</span><span class="p">,</span>
+      <span class="c1">// retryStrategy.</span>
+      <span class="k">new</span> <span class="n">DefaultBatchLoadRetryStrategy</span><span class="p">()</span>
+  <span class="p">);</span>
+  <span class="k">return</span> <span class="n">results</span><span class="p">.</span><span class="na">getItems</span><span class="p">(</span><span class="n">AlbumTrack</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</div>
+</div>
 <div class="admonition tip">
 <p class="admonition-title">Batch load does not return items in any particular order</p>
 <p>In order to minimize response latency, BatchGetItem retrieves items in parallel.</p>
@@ -624,23 +644,48 @@ however BatchWriteItem as a whole is not. If any requested operations fail becau
 provisioned throughput is exceeded or an internal processing failure occurs, the failed operations 
 are returned in the UnprocessedItems response parameter.</p>
 </div>
-<div class="highlight"><pre><span></span><code><span class="k">val</span> <span class="py">musicDb</span><span class="p">:</span> <span class="n">MusicDb</span>
+<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Kotlin</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="k">private</span> <span class="k">val</span> <span class="py">db</span><span class="p">:</span> <span class="n">MusicDb</span>
 
 <span class="k">fun</span> <span class="nf">backfill</span><span class="p">(</span>
-  <span class="n">albumTracksToSave</span><span class="p">:</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">AlbumTrack</span><span class="p">&gt;,</span> 
+  <span class="n">albumTracksToSave</span><span class="p">:</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">AlbumTrack</span><span class="p">&gt;,</span>
   <span class="n">albumTracksToDelete</span><span class="p">:</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">AlbumTrack</span><span class="p">.</span><span class="n">Key</span><span class="p">&gt;</span>
 <span class="p">):</span> <span class="n">Boolean</span> <span class="p">{</span>
   <span class="k">val</span> <span class="py">writeSet</span> <span class="p">=</span> <span class="n">BatchWriteSet</span><span class="p">.</span><span class="n">Builder</span><span class="p">()</span>
     <span class="p">.</span><span class="n">clobber</span><span class="p">(</span><span class="n">albumTracksToSave</span><span class="p">)</span>
     <span class="p">.</span><span class="n">delete</span><span class="p">(</span><span class="n">albumTracksToDelete</span><span class="p">)</span>
     <span class="p">.</span><span class="n">build</span><span class="p">()</span>
-  <span class="k">val</span> <span class="py">result</span> <span class="p">=</span> <span class="n">musicDb</span><span class="p">.</span><span class="n">batchWrite</span><span class="p">(</span>
+  <span class="k">val</span> <span class="py">result</span> <span class="p">=</span> <span class="n">db</span><span class="p">.</span><span class="n">batchWrite</span><span class="p">(</span>
     <span class="n">writeSet</span><span class="p">,</span>
     <span class="n">retryStrategy</span> <span class="p">=</span> <span class="n">DefaultBatchWriteRetryStrategy</span><span class="p">()</span>
   <span class="p">)</span>
   <span class="k">return</span> <span class="n">result</span><span class="p">.</span><span class="n">isSuccessful</span>
 <span class="p">}</span>
 </code></pre></div>
+
+</div>
+<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">Java</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">private</span> <span class="kd">final</span> <span class="n">MusicDb</span> <span class="n">db</span><span class="p">;</span>
+
+<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">backfill</span><span class="p">(</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">AlbumTrack</span><span class="o">&gt;</span> <span class="n">albumTracksToSave</span><span class="p">,</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">AlbumTrack</span><span class="p">.</span><span class="na">Key</span><span class="o">&gt;</span> <span class="n">albumTracksToDelete</span>
+<span class="p">)</span> <span class="p">{</span>
+  <span class="n">BatchWriteSet</span> <span class="n">writeSet</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BatchWriteSet</span><span class="p">.</span><span class="na">Builder</span><span class="p">()</span>
+      <span class="p">.</span><span class="na">clobber</span><span class="p">(</span><span class="n">albumTracksToSave</span><span class="p">)</span>
+      <span class="p">.</span><span class="na">delete</span><span class="p">(</span><span class="n">albumTracksToDelete</span><span class="p">)</span>
+      <span class="p">.</span><span class="na">build</span><span class="p">();</span>
+  <span class="n">BatchWriteResult</span> <span class="n">result</span> <span class="o">=</span> <span class="n">db</span><span class="p">.</span><span class="na">batchWrite</span><span class="p">(</span>
+      <span class="n">writeSet</span><span class="p">,</span>
+      <span class="c1">// retryStrategy.</span>
+      <span class="k">new</span> <span class="n">DefaultBatchWriteRetryStrategy</span><span class="p">()</span>
+  <span class="p">);</span>
+  <span class="k">return</span> <span class="n">result</span><span class="p">.</span><span class="na">isSuccessful</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</div>
+</div>
                 
               
               
@@ -712,14 +757,14 @@ are returned in the UnprocessedItems response parameter.</p>
     </div>
     
       <script src="../../assets/javascripts/vendor.d710d30a.min.js"></script>
-      <script src="../../assets/javascripts/bundle.b39636ac.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      <script src="../../assets/javascripts/bundle.4a5ba8d6.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
       
       <script>
         app = initialize({
           base: "../..",
           features: {"tabs": true},
           search: Object.assign({
-            worker: "../../assets/javascripts/worker/search.a68abb33.min.js"
+            worker: "../../assets/javascripts/worker/search.9b3611bd.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>

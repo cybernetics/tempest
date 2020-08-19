@@ -17,7 +17,7 @@
         <meta name="author" content="Square, Inc.">
       
       <link rel="shortcut icon" href="../../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.4.0">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.3.3">
     
     
       
@@ -519,6 +519,7 @@
 <p>DynamoDB global tables use a “last writer wins” reconciliation between concurrent updates. If you use global tables, last writer policy wins. So in this case, the locking strategy does not work as expected.</p>
 </div>
 <p>Let&rsquo;s add a playlist feature to our music library:</p>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Kotlin</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="k">interface</span> <span class="nc">MusicTable</span> <span class="p">:</span> <span class="n">LogicalTable</span><span class="p">&lt;</span><span class="n">MusicItem</span><span class="p">&gt;</span> <span class="p">{</span>
   <span class="k">val</span> <span class="py">playlistInfo</span><span class="p">:</span> <span class="n">InlineView</span><span class="p">&lt;</span><span class="n">PlaylistInfo</span><span class="p">.</span><span class="n">Key</span><span class="p">,</span> <span class="n">PlaylistInfo</span><span class="p">&gt;</span>
 <span class="p">}</span>
@@ -527,8 +528,8 @@
   <span class="n">@Attribute</span><span class="p">(</span><span class="n">name</span> <span class="p">=</span> <span class="s">&quot;partition_key&quot;</span><span class="p">)</span>
   <span class="k">val</span> <span class="py">playlist_token</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span>
   <span class="k">val</span> <span class="py">playlist_name</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span>
-  <span class="k">val</span> <span class="py">playlist_version</span><span class="p">:</span> <span class="n">Long</span><span class="p">,</span>
-  <span class="k">val</span> <span class="py">track_tokens</span><span class="p">:</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">AlbumTrack</span><span class="p">.</span><span class="n">Key</span><span class="p">&gt;</span>
+  <span class="k">val</span> <span class="py">playlist_tracks</span><span class="p">:</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">AlbumTrack</span><span class="p">.</span><span class="n">Key</span><span class="p">&gt;,</span>
+  <span class="k">val</span> <span class="py">playlist_version</span><span class="p">:</span> <span class="n">Long</span> <span class="p">=</span> <span class="m">1</span>
 <span class="p">)</span> <span class="p">{</span>
   <span class="n">@Attribute</span><span class="p">(</span><span class="n">prefix</span> <span class="p">=</span> <span class="s">&quot;INFO_&quot;</span><span class="p">)</span>
   <span class="k">val</span> <span class="py">sort_key</span><span class="p">:</span> <span class="n">String</span> <span class="p">=</span> <span class="s">&quot;&quot;</span>
@@ -541,19 +542,63 @@
 <span class="p">}</span>
 </code></pre></div>
 
-<p>To serialize writes to the same playlist, we can have all writers implement optimistic locking on the <code>playlist_version</code> attribute. </p>
-<div class="highlight"><pre><span></span><code><span class="k">private</span> <span class="k">val</span> <span class="py">musicTable</span><span class="p">:</span> <span class="n">MusicTable</span>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Java</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">MusicTable</span> <span class="kd">extends</span> <span class="n">LogicalTable</span><span class="o">&lt;</span><span class="n">MusicItem</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="n">InlineView</span><span class="o">&lt;</span><span class="n">PlaylistInfo</span><span class="p">.</span><span class="na">Key</span><span class="p">,</span> <span class="n">PlaylistInfo</span><span class="o">&gt;</span> <span class="nf">playlistInfo</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PlaylistInfo</span> <span class="p">{</span>
+  <span class="nd">@Attribute</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;partition_key&quot;</span><span class="p">)</span>
+  <span class="kd">public</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">playlist_token</span><span class="p">;</span>
+  <span class="kd">public</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">playlist_name</span><span class="p">;</span>
+  <span class="kd">public</span> <span class="kd">final</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">AlbumTrack</span><span class="p">.</span><span class="na">Key</span><span class="o">&gt;</span> <span class="n">playlist_tracks</span><span class="p">;</span>
+  <span class="kd">public</span> <span class="kd">final</span> <span class="n">Long</span> <span class="n">playlist_version</span><span class="p">;</span>
+  <span class="nd">@Attribute</span><span class="p">(</span><span class="n">prefix</span> <span class="o">=</span> <span class="s">&quot;INFO_&quot;</span><span class="p">)</span>
+  <span class="kd">public</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">sort_key</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+
+  <span class="kd">public</span> <span class="nf">PlaylistInfo</span><span class="p">(</span><span class="n">String</span> <span class="n">playlist_token</span><span class="p">,</span> <span class="n">String</span> <span class="n">playlist_name</span><span class="p">,</span>
+      <span class="n">List</span><span class="o">&lt;</span><span class="n">AlbumTrack</span><span class="p">.</span><span class="na">Key</span><span class="o">&gt;</span> <span class="n">playlist_tracks</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">(</span><span class="n">playlist_token</span><span class="p">,</span> <span class="n">playlist_name</span><span class="p">,</span> <span class="n">playlist_tracks</span><span class="p">,</span> <span class="mi">1L</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="kd">public</span> <span class="nf">PlaylistInfo</span><span class="p">(</span><span class="n">String</span> <span class="n">playlist_token</span><span class="p">,</span> <span class="n">String</span> <span class="n">playlist_name</span><span class="p">,</span>
+      <span class="n">List</span><span class="o">&lt;</span><span class="n">AlbumTrack</span><span class="p">.</span><span class="na">Key</span><span class="o">&gt;</span> <span class="n">playlist_tracks</span><span class="p">,</span> <span class="n">Long</span> <span class="n">playlist_version</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">playlist_token</span> <span class="o">=</span> <span class="n">playlist_token</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">playlist_name</span> <span class="o">=</span> <span class="n">playlist_name</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">playlist_tracks</span> <span class="o">=</span> <span class="n">playlist_tracks</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="na">playlist_version</span> <span class="o">=</span> <span class="n">playlist_version</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Key</span> <span class="p">{</span>
+    <span class="kd">public</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">playlist_token</span><span class="p">;</span>
+    <span class="kd">public</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">sort_key</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+
+    <span class="kd">public</span> <span class="nf">Key</span><span class="p">(</span><span class="n">String</span> <span class="n">playlist_token</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="na">playlist_token</span> <span class="o">=</span> <span class="n">playlist_token</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</div>
+</div>
+<p>To serialize writes to the same playlist, we can have writers implement optimistic locking on the <code>playlist_version</code> attribute. </p>
+<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Kotlin</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="k">private</span> <span class="k">val</span> <span class="py">table</span><span class="p">:</span> <span class="n">MusicTable</span>
 
 <span class="k">fun</span> <span class="nf">changePlaylistName</span><span class="p">(</span><span class="n">playlistToken</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="n">newName</span><span class="p">:</span> <span class="n">String</span><span class="p">)</span> <span class="p">{</span>
   <span class="c1">// Read.</span>
-  <span class="k">val</span> <span class="py">existing</span> <span class="p">=</span> <span class="n">musicTable</span><span class="p">.</span><span class="n">playlistInfo</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">PlaylistInfo</span><span class="p">.</span><span class="n">Key</span><span class="p">(</span><span class="n">playlistToken</span><span class="p">))</span>
+  <span class="k">val</span> <span class="py">existing</span> <span class="p">=</span> <span class="n">checkNotNull</span><span class="p">(</span>
+    <span class="n">table</span><span class="p">.</span><span class="n">playlistInfo</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">PlaylistInfo</span><span class="p">.</span><span class="n">Key</span><span class="p">(</span><span class="n">playlistToken</span><span class="p">))</span>
+  <span class="p">)</span> <span class="p">{</span> <span class="s">&quot;Playlist does not exist: $playlistToken&quot;</span> <span class="p">}</span>
   <span class="c1">// Modify.</span>
   <span class="k">val</span> <span class="py">newPlaylist</span> <span class="p">=</span> <span class="n">existing</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span>
     <span class="n">playlist_name</span> <span class="p">=</span> <span class="n">newName</span><span class="p">,</span>
     <span class="n">playlist_version</span> <span class="p">=</span> <span class="n">existing</span><span class="p">.</span><span class="n">playlist_version</span> <span class="p">+</span> <span class="m">1</span>
   <span class="p">)</span>
   <span class="c1">// Write.</span>
-  <span class="n">musicTable</span><span class="p">.</span><span class="n">playlistInfo</span><span class="p">.</span><span class="n">save</span><span class="p">(</span>
+  <span class="n">table</span><span class="p">.</span><span class="n">playlistInfo</span><span class="p">.</span><span class="n">save</span><span class="p">(</span>
     <span class="n">newPlaylist</span><span class="p">,</span>
     <span class="n">ifPlaylistVersionIs</span><span class="p">(</span><span class="n">existing</span><span class="p">.</span><span class="n">playlist_version</span><span class="p">)</span>
   <span class="p">)</span>
@@ -569,6 +614,45 @@
     <span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
+
+</div>
+<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">Java</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kd">private</span> <span class="n">val</span> <span class="n">table</span><span class="p">:</span> <span class="n">MusicTable</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">changePlaylistName</span><span class="p">(</span><span class="n">String</span> <span class="n">playlistToken</span><span class="p">,</span> <span class="n">String</span> <span class="n">newName</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// Read.</span>
+  <span class="n">PlaylistInfo</span> <span class="n">existing</span> <span class="o">=</span> <span class="n">table</span><span class="p">.</span><span class="na">playlistInfo</span><span class="p">().</span><span class="na">load</span><span class="p">(</span><span class="k">new</span> <span class="n">PlaylistInfo</span><span class="p">.</span><span class="na">Key</span><span class="p">(</span><span class="n">playlistToken</span><span class="p">));</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">existing</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalStateException</span><span class="p">(</span><span class="s">&quot;Playlist does not exist: &quot;</span> <span class="o">+</span> <span class="n">playlistToken</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="c1">// Modify.</span>
+  <span class="n">PlaylistInfo</span> <span class="n">newPlaylist</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PlaylistInfo</span><span class="p">(</span>
+      <span class="n">existing</span><span class="p">.</span><span class="na">playlist_token</span><span class="p">,</span>
+      <span class="n">newName</span><span class="p">,</span>
+      <span class="n">existing</span><span class="p">.</span><span class="na">playlist_tracks</span><span class="p">,</span>
+      <span class="c1">// playlist_version.</span>
+      <span class="n">existing</span><span class="p">.</span><span class="na">playlist_version</span> <span class="o">+</span> <span class="mi">1</span>
+  <span class="p">);</span>
+  <span class="c1">// Write.</span>
+  <span class="n">table</span><span class="p">.</span><span class="na">playlistInfo</span><span class="p">().</span><span class="na">save</span><span class="p">(</span>
+      <span class="n">newPlaylist</span><span class="p">,</span>
+      <span class="n">ifPlaylistVersionIs</span><span class="p">(</span><span class="n">existing</span><span class="p">.</span><span class="na">playlist_version</span><span class="p">)</span>
+  <span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">private</span> <span class="n">DynamoDBSaveExpression</span> <span class="nf">ifPlaylistVersionIs</span><span class="p">(</span><span class="n">Long</span> <span class="n">playlist_version</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="n">DynamoDBSaveExpression</span><span class="p">()</span>
+      <span class="p">.</span><span class="na">withExpectedEntry</span><span class="p">(</span>
+          <span class="s">&quot;playlist_version&quot;</span><span class="p">,</span>
+          <span class="k">new</span> <span class="n">ExpectedAttributeValue</span><span class="p">()</span>
+              <span class="p">.</span><span class="na">withComparisonOperator</span><span class="p">(</span><span class="n">ComparisonOperator</span><span class="p">.</span><span class="na">EQ</span><span class="p">)</span>
+              <span class="p">.</span><span class="na">withAttributeValueList</span><span class="p">(</span><span class="k">new</span> <span class="n">AttributeValue</span><span class="p">().</span><span class="na">withN</span><span class="p">(</span><span class="s">&quot;&quot;</span> <span class="o">+</span> <span class="n">playlist_version</span><span class="p">))</span>
+      <span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</div>
+</div>
                 
               
               
@@ -640,14 +724,14 @@
     </div>
     
       <script src="../../assets/javascripts/vendor.d710d30a.min.js"></script>
-      <script src="../../assets/javascripts/bundle.b39636ac.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      <script src="../../assets/javascripts/bundle.4a5ba8d6.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
       
       <script>
         app = initialize({
           base: "../..",
           features: {"tabs": true},
           search: Object.assign({
-            worker: "../../assets/javascripts/worker/search.a68abb33.min.js"
+            worker: "../../assets/javascripts/worker/search.9b3611bd.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>
