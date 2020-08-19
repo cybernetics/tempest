@@ -1,4 +1,6 @@
 $dokka.format:gfm
 $dokka.linkExtension:md
-
+$dokka.location:app.cash.tempest.internal$forceSet(kotlin.reflect.KProperty1((app.cash.tempest.internal.forceSet.T, app.cash.tempest.internal.forceSet.R)), app.cash.tempest.internal.forceSet.T, app.cash.tempest.internal.forceSet.R)app.cash.tempest.internal/kotlin.reflect.-k-property1/force-set.md
+$dokka.location:app.cash.tempest.internal$isVar#kotlin.reflect.KProperty((kotlin.Any))app.cash.tempest.internal/kotlin.reflect.-k-property/is-var.md
 app.cash.tempest
+app.cash.tempest.internal

@@ -21,7 +21,7 @@
     
     
       
-        <title>key condition - Tempest</title>
+        <title>KeyCondition - Tempest</title>
       
     
     
@@ -93,7 +93,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-               key condition
+              KeyCondition - Tempest
             
           </span>
         </div>
@@ -534,7 +534,7 @@
                 
                 <p><a href="../../">tempest</a> / <a href="../">app.cash.tempest</a> / <a href="./">KeyCondition</a></p>
 <h1 id="keycondition">KeyCondition<a class="headerlink" href="#keycondition" title="Permanent link">&para;</a></h1>
-<p><code>sealed class KeyCondition&lt;K :</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><code>Any</code></a><code>&gt;</code></p>
+<p><code>sealed class KeyCondition&lt;K&gt;</code></p>
 <p>Used to query a table or an index.</p>
 <h3 id="inheritors">Inheritors<a class="headerlink" href="#inheritors" title="Permanent link">&para;</a></h3>
 <table>
@@ -547,14 +547,16 @@
 <tbody>
 <tr>
 <td><a href="../-begins-with/">BeginsWith</a></td>
-<td><code>data class BeginsWith&lt;K :</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><code>Any</code></a><code>&gt; :</code><a href="./"><code>KeyCondition</code></a><code>&lt;</code><a href="../-begins-with/#K"><code>K</code></a><code>&gt;</code><br>Applies equality condition on the hash key and the following condition on the range key</td>
+<td><code>data class BeginsWith&lt;K&gt; :</code><a href="./"><code>KeyCondition</code></a><code>&lt;</code><a href="../-begins-with/#K"><code>K</code></a><code>&gt;</code><br>Applies equality condition on the hash key and the following condition on the range key</td>
 </tr>
 <tr>
 <td><a href="../-between/">Between</a></td>
-<td><code>data class Between&lt;K :</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><code>Any</code></a><code>&gt; :</code><a href="./"><code>KeyCondition</code></a><code>&lt;</code><a href="../-between/#K"><code>K</code></a><code>&gt;</code><br>Applies equality condition on the hash key and the following condition on the range key</td>
+<td><code>data class Between&lt;K&gt; :</code><a href="./"><code>KeyCondition</code></a><code>&lt;</code><a href="../-between/#K"><code>K</code></a><code>&gt;</code><br>Applies equality condition on the hash key and the following condition on the range key</td>
 </tr>
 </tbody>
 </table>
+                
+                  
                 
               
               

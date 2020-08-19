@@ -21,7 +21,7 @@
     
     
       
-        <title>Batch load - Tempest</title>
+        <title>batchLoad - Tempest</title>
       
     
     
@@ -93,7 +93,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              Batch load
+              batchLoad - Tempest
             
           </span>
         </div>
@@ -526,7 +526,12 @@ provisioned throughput is exceeded, or an internal processing failure occurs. If
 result is returned, this method backs off and retries the <code>UnprocessedKeys</code> in the next API
 call.</p>
 <p><code>open fun batchLoad(keys:</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-iterable/index.html"><code>Iterable</code></a><code>&lt;</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><code>Any</code></a><code>&gt;, consistentReads:</code><a href="https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/dynamodbv2/datamodeling/DynamoDBMapperConfig/ConsistentReads.html"><code>ConsistentReads</code></a><code>= EVENTUAL, retryStrategy:</code><a href="https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/dynamodbv2/datamodeling/DynamoDBMapperConfig/BatchLoadRetryStrategy.html"><code>BatchLoadRetryStrategy</code></a><code>= DefaultBatchLoadRetryStrategy()):</code><a href="../../-item-set/"><code>ItemSet</code></a>
-<code>open fun batchLoad(vararg keys:</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><code>Any</code></a><code>, consistentReads:</code><a href="https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/dynamodbv2/datamodeling/DynamoDBMapperConfig/ConsistentReads.html"><code>ConsistentReads</code></a><code>= EVENTUAL, retryStrategy:</code><a href="https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/dynamodbv2/datamodeling/DynamoDBMapperConfig/BatchLoadRetryStrategy.html"><code>BatchLoadRetryStrategy</code></a><code>= DefaultBatchLoadRetryStrategy()):</code><a href="../../-item-set/"><code>ItemSet</code></a></p>
+<code>open fun batchLoad(vararg keys:</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><code>Any</code></a><code>, consistentReads:</code><a href="https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/dynamodbv2/datamodeling/DynamoDBMapperConfig/ConsistentReads.html"><code>ConsistentReads</code></a><code>= EVENTUAL, retryStrategy:</code><a href="https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/dynamodbv2/datamodeling/DynamoDBMapperConfig/BatchLoadRetryStrategy.html"><code>BatchLoadRetryStrategy</code></a><code>= DefaultBatchLoadRetryStrategy()):</code><a href="../../-item-set/"><code>ItemSet</code></a>
+<code>open fun batchLoad(keys:</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-iterable/index.html"><code>Iterable</code></a><code>&lt;</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><code>Any</code></a><code>&gt;):</code><a href="../../-item-set/"><code>ItemSet</code></a>
+<code>open fun batchLoad(keys:</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-iterable/index.html"><code>Iterable</code></a><code>&lt;</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><code>Any</code></a><code>&gt;, consistentReads:</code><a href="https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/dynamodbv2/datamodeling/DynamoDBMapperConfig/ConsistentReads.html"><code>ConsistentReads</code></a><code>):</code><a href="../../-item-set/"><code>ItemSet</code></a>
+<code>open fun batchLoad(keys:</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-iterable/index.html"><code>Iterable</code></a><code>&lt;</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><code>Any</code></a><code>&gt;, retryStrategy:</code><a href="https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/dynamodbv2/datamodeling/DynamoDBMapperConfig/BatchLoadRetryStrategy.html"><code>BatchLoadRetryStrategy</code></a><code>):</code><a href="../../-item-set/"><code>ItemSet</code></a></p>
+                
+                  
                 
               
               

@@ -21,7 +21,7 @@
     
     
       
-        <title>Query - Tempest</title>
+        <title>query - Tempest</title>
       
     
     
@@ -93,7 +93,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              Query
+              query - Tempest
             
           </span>
         </div>
@@ -517,9 +517,15 @@
                 
                 <p><a href="../../../">tempest</a> / <a href="../../">app.cash.tempest</a> / <a href="../">Queryable</a> / <a href="./">query</a></p>
 <h1 id="query">query<a class="headerlink" href="#query" title="Permanent link">&para;</a></h1>
-<p><code>abstract fun query(keyCondition:</code><a href="../../-key-condition/"><code>KeyCondition</code></a><code>&lt;</code><a href="../#K"><code>K</code></a><code>&gt;, consistentRead:</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><code>Boolean</code></a><code>= false, asc:</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><code>Boolean</code></a><code>= true, pageSize:</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><code>Int</code></a><code>= 100, returnConsumedCapacity:</code><a href="https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/dynamodbv2/model/ReturnConsumedCapacity.html"><code>ReturnConsumedCapacity</code></a><code>= NONE, filterExpression:</code><a href="../../-filter-expression/"><code>FilterExpression</code></a><code>? = null, initialOffset:</code><a href="../../-offset/"><code>Offset</code></a><code>&lt;</code><a href="../#K"><code>K</code></a><code>&gt;? = null):</code><a href="../../-page/"><code>Page</code></a><code>&lt;</code><a href="../#K"><code>K</code></a><code>,</code><a href="../#I"><code>I</code></a><code>&gt;</code></p>
-<p>Reads up to the <a href="./#app.cash.tempest.Queryable$query(app.cash.tempest.KeyCondition((app.cash.tempest.Queryable.K)), kotlin.Boolean, kotlin.Boolean, kotlin.Int, com.amazonaws.services.dynamodbv2.model.ReturnConsumedCapacity, app.cash.tempest.FilterExpression, app.cash.tempest.Offset((app.cash.tempest.Queryable.K)))/pageSize">pageSize</a> items or a maximum of 1 MB of data. This limit applies before the
+<p><code>abstract fun query(keyCondition:</code><a href="../../-key-condition/"><code>KeyCondition</code></a><code>&lt;</code><a href="../#K"><code>K</code></a><code>&gt;, asc:</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><code>Boolean</code></a><code>= true, pageSize:</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><code>Int</code></a><code>= 100, consistentRead:</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><code>Boolean</code></a><code>= false, returnConsumedCapacity:</code><a href="https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/dynamodbv2/model/ReturnConsumedCapacity.html"><code>ReturnConsumedCapacity</code></a><code>= NONE, filterExpression:</code><a href="../../-filter-expression/"><code>FilterExpression</code></a><code>? = null, initialOffset:</code><a href="../../-offset/"><code>Offset</code></a><code>&lt;</code><a href="../#K"><code>K</code></a><code>&gt;? = null):</code><a href="../../-page/"><code>Page</code></a><code>&lt;</code><a href="../#K"><code>K</code></a><code>,</code><a href="../#I"><code>I</code></a><code>&gt;</code></p>
+<p>Reads up to the <a href="./#app.cash.tempest.Queryable$query(app.cash.tempest.KeyCondition((app.cash.tempest.Queryable.K)), kotlin.Boolean, kotlin.Int, kotlin.Boolean, com.amazonaws.services.dynamodbv2.model.ReturnConsumedCapacity, app.cash.tempest.FilterExpression, app.cash.tempest.Offset((app.cash.tempest.Queryable.K)))/pageSize">pageSize</a> items or a maximum of 1 MB of data. This limit applies before the
 filter expression is evaluated.</p>
+<p><code>open fun query(keyCondition:</code><a href="../../-key-condition/"><code>KeyCondition</code></a><code>&lt;</code><a href="../#K"><code>K</code></a><code>&gt;):</code><a href="../../-page/"><code>Page</code></a><code>&lt;</code><a href="../#K"><code>K</code></a><code>,</code><a href="../#I"><code>I</code></a><code>&gt;</code>
+<code>open fun query(keyCondition:</code><a href="../../-key-condition/"><code>KeyCondition</code></a><code>&lt;</code><a href="../#K"><code>K</code></a><code>&gt;, initialOffset:</code><a href="../../-offset/"><code>Offset</code></a><code>&lt;</code><a href="../#K"><code>K</code></a><code>&gt;?):</code><a href="../../-page/"><code>Page</code></a><code>&lt;</code><a href="../#K"><code>K</code></a><code>,</code><a href="../#I"><code>I</code></a><code>&gt;</code>
+<code>open fun query(keyCondition:</code><a href="../../-key-condition/"><code>KeyCondition</code></a><code>&lt;</code><a href="../#K"><code>K</code></a><code>&gt;, config:</code><a href="../../-query-config/"><code>QueryConfig</code></a><code>):</code><a href="../../-page/"><code>Page</code></a><code>&lt;</code><a href="../#K"><code>K</code></a><code>,</code><a href="../#I"><code>I</code></a><code>&gt;</code>
+<code>open fun query(keyCondition:</code><a href="../../-key-condition/"><code>KeyCondition</code></a><code>&lt;</code><a href="../#K"><code>K</code></a><code>&gt;, config:</code><a href="../../-query-config/"><code>QueryConfig</code></a><code>, initialOffset:</code><a href="../../-offset/"><code>Offset</code></a><code>&lt;</code><a href="../#K"><code>K</code></a><code>&gt;?):</code><a href="../../-page/"><code>Page</code></a><code>&lt;</code><a href="../#K"><code>K</code></a><code>,</code><a href="../#I"><code>I</code></a><code>&gt;</code></p>
+                
+                  
                 
               
               

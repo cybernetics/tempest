@@ -21,7 +21,7 @@
     
     
       
-        <title>Before page - Tempest</title>
+        <title>beforePage - Tempest</title>
       
     
     
@@ -93,7 +93,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              Before page
+              beforePage - Tempest
             
           </span>
         </div>
@@ -534,13 +534,15 @@
                 
                 <p><a href="../../../../">tempest</a> / <a href="../../../">app.cash.tempest</a> / <a href="../../">WritingPager</a> / <a href="../">Handler</a> / <a href="./">beforePage</a></p>
 <h1 id="beforepage">beforePage<a class="headerlink" href="#beforepage" title="Permanent link">&para;</a></h1>
-<p><code>abstract fun beforePage(remainingUpdates:</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><code>List</code></a><code>&lt;</code><a href="../#T"><code>T</code></a><code>&gt;, maxTransactionItems:</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><code>Int</code></a><code>):</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><code>Int</code></a></p>
+<p><code>abstract fun beforePage(remainingUpdates:</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><code>List</code></a><code>&lt;@JvmSuppressWildcards</code><a href="../#T"><code>T</code></a><code>&gt;, maxTransactionItems:</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><code>Int</code></a><code>):</code><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><code>Int</code></a></p>
 <p>Invoked before each page with the full set of updates yet be processed.</p>
 <h3 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h3>
 <p><code>remainingUpdates</code> - all remaining updates. This may be more than a single page of
     entities.</p>
 <p><strong>Return</strong>
 the number of updates that fits in the current page.</p>
+                
+                  
                 
               
               
