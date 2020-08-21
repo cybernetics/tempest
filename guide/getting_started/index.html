@@ -153,62 +153,6 @@
       
       
         
-          
-
-  
-
-<nav class="md-tabs md-tabs--active" aria-label="Tabs" data-md-component="tabs">
-  <div class="md-tabs__inner md-grid">
-    <ul class="md-tabs__list">
-      
-        
-  <li class="md-tabs__item">
-    
-      <a href="../.." class="md-tabs__link">
-        Overview
-      </a>
-    
-  </li>
-
-      
-        
-  
-  
-    <li class="md-tabs__item">
-      
-        <a href="./" class="md-tabs__link md-tabs__link--active">
-          Guides
-        </a>
-      
-    </li>
-  
-
-      
-        
-  
-  
-    <li class="md-tabs__item">
-      
-        <a href="../../0.x/tempest/app.cash.tempest/" class="md-tabs__link">
-          Reference
-        </a>
-      
-    </li>
-  
-
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    </ul>
-  </div>
-</nav>
-        
       
       <main class="md-main" data-md-component="main">
         <div class="md-main__inner md-grid">
@@ -589,7 +533,7 @@
                   <h1>Getting Started</h1>
                 
                 <div class="admonition tip">
-<p class="admonition-title">Tip</p>
+<p class="admonition-title">Prerequisites</p>
 <p>In DynamoDB, <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.CoreComponents.html">tables, items, and attributes</a> are the core components that you work with. 
 A table is a collection of items, and each item is a collection of attributes. 
 DynamoDB uses primary keys to uniquely identify each item in a table and secondary indexes to provide more querying flexibility.</p>
@@ -869,6 +813,11 @@ DynamoDB uses primary keys to uniquely identify each item in a table and seconda
 
 </div>
 </div>
+<hr />
+<p>Check out the code samples on Github:</p>
+<ul>
+<li>URL Shortener (<a href="https://github.com/cashapp/tempest/tree/master/samples/urlshortener/src/main/kotlin/app/cash/tempest/urlshortener">.kt</a>, <a href="https://github.com/cashapp/tempest/tree/master/samples/urlshortener/src/main/java/app/cash/tempest/urlshortener/java">.java</a>)</li>
+</ul>
                 
               
               
@@ -945,7 +894,7 @@ DynamoDB uses primary keys to uniquely identify each item in a table and seconda
       <script>
         app = initialize({
           base: "../..",
-          features: {"tabs": true},
+          features: [],
           search: Object.assign({
             worker: "../../assets/javascripts/worker/search.9b3611bd.min.js"
           }, typeof search !== "undefined" && search)
