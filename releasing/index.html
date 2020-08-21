@@ -367,8 +367,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../0.x/tempest/app.cash.tempest/" title="0.x API" class="md-nav__link">
-      0.x API
+    <a href="../1.x/tempest/app.cash.tempest/" title="1.x API" class="md-nav__link">
+      1.x API
     </a>
   </li>
 
@@ -482,6 +482,7 @@
 <li><code>git push &amp;&amp; git push --tags</code></li>
 <li>Wait until the &ldquo;Publish a release&rdquo; action completes, then visit <a href="https://oss.sonatype.org/">Sonatype Nexus</a> and promote the artifacts.</li>
 <li>Update the sample app to the release version and send a PR.</li>
+<li>Draft a new <a href="https://docs.github.com/en/github/administering-a-repository/managing-releases-in-a-repository">release</a> of <code>X.Y.Z</code> to trigger the &ldquo;Publish the mkdocs to gh-pages&rdquo; action.</li>
 </ol>
 <p>If the github action fails, drop the artifacts from Sonatype and re run the job. You might need to
 delete the plugin off the JetBrains plugin portal first if the ubuntu job which publishes it
